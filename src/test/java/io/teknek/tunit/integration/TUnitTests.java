@@ -65,7 +65,6 @@ public class TUnitTests {
       }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isEqualTo(10);
   }
   
-  
   @Test
   public void aStatefulThingThatChangesButNeverPasss() throws InterruptedException{
     final Changing c = new Changing();
@@ -81,6 +80,43 @@ public class TUnitTests {
       threw = true;
     }
     Assert.assertTrue(threw);
-    Assert.assertTrue((System.currentTimeMillis()- start ) >= 2000 );
+    Assert.assertTrue((System.currentTimeMillis() - start ) >= 2000 );
+  }
+  
+  @Test
+  public void callableAssert() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isNotEqualTo(11);
+  }
+  
+
+  @Test
+  public void callableAssertToFail1() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isNotEqualTo(10);
+  }
+  
+  @Test
+  public void callableAssertToFail2() throws InterruptedException{
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return 5;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isNotEqualTo(10);
+  }
+  
+  @Test(expected=ComparisonFailure.class)
+  public void callableAssertToFail3() throws InterruptedException{
+  TUnit.assertThat( new Callable<Integer>() {
+    public Integer call() throws Exception {
+      return 5;
+    }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isNotEqualTo(5);
   }
 }
