@@ -6,10 +6,10 @@ import io.teknek.tunit.TUnit;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
+
 public class TUnitTests {
 
   @Test
@@ -63,5 +63,24 @@ public class TUnitTests {
       public Integer call() throws Exception {
         return c.x;
       }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isEqualTo(10);
+  }
+  
+  
+  @Test
+  public void aStatefulThingThatChangesButNeverPasss() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    long start = System.currentTimeMillis();
+    boolean threw = false;
+    try { 
+      TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isEqualTo(40);
+    } catch (ComparisonFailure ex){
+      threw = true;
+    }
+    Assert.assertTrue(threw);
+    Assert.assertTrue((System.currentTimeMillis()- start ) >= 2000 );
   }
 }
