@@ -27,7 +27,7 @@ public class TUnitStubThatWaits<T>{
     if (result.equals(expected)){
       return;
     }
-    for (long now = System.currentTimeMillis(); start + waitInMillis < now; now = System.currentTimeMillis()){
+    for (long now = System.currentTimeMillis(); now < start + waitInMillis ; now = System.currentTimeMillis()){
       try {
         result = operation.call();
         if (result.equals(expected)){
