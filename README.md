@@ -1,5 +1,5 @@
 # tunit
-Time/Transition Unit testing extensions
+Time/Transition Unit testing extensions ![Build status](https://travis-ci.org/edwardcapriolo/tunit.svg?branch=master)
 
 Motivation
 -----
