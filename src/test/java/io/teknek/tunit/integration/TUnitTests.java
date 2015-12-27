@@ -171,9 +171,7 @@ public class TUnitTests {
     TUnit.assertThat( new Callable<Integer>() {
       public Integer call() throws Exception {
         return c.x;
-      }})
-      .is(isEqualTo(10));
+      }}).is(isEqualTo(10));
   }
-  
   
 }
