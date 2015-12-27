@@ -1,6 +1,5 @@
-# tunit
-Time/Transition Unit testing extensions ![Build status](https://travis-ci.org/edwardcapriolo/tunit.svg?branch=master)
-
+# tunit ![Build status](https://travis-ci.org/edwardcapriolo/tunit.svg?branch=master)
+Time/Transition Unit testing extensions 
 Motivation
 -----
 At times complex async applications become hard to test. This is especially true for 3rd party applications, async applications, and background threads inside applications. TUnit (Time/Transition/Teknek Unit) is designed to help test these types of applications.
