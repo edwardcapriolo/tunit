@@ -118,3 +118,16 @@ public static class IsEqualTo implements Function1<Boolean,Integer>{
       }}).is(isEqualTo(10));
   }
 ```
+Maven
+------
+
+
+You can get this software from maven central.
+
+```xml
+  <dependency>
+       <groupId>io.teknek</groupId>
+      <artifactId>tunit</artifactId>
+      <version>${pick_the_latest_version}</version>
+  </dependency>
+```
