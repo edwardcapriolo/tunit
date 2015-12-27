@@ -1,6 +1,7 @@
 package io.teknek.tunit.integration;
 import static io.teknek.tunit.TUnit.*;
 
+import io.teknek.tunit.Function1;
 import io.teknek.tunit.TUnit;
 
 import java.util.concurrent.Callable;
@@ -119,4 +120,60 @@ public class TUnitTests {
       return 5;
     }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS).isNotEqualTo(5);
   }
+  
+  
+  @Test
+  public void callableAssertIs() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS)
+      .is(new Function1<Boolean,Integer>(){
+        public Boolean function(Integer x) {
+          return x == 10;
+        }});
+  }
+  
+  @Test(expected=ComparisonFailure.class)
+  public void callableAssertIsBlowsUp() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }}).afterWaitingAtMost(2000, TimeUnit.MILLISECONDS)
+      .is(new Function1<Boolean,Integer>(){
+        public Boolean function(Integer x) {
+          return x == 11;
+        }});
+  }
+
+  public static class IsEqualTo implements Function1<Boolean,Integer>{
+    private Integer n;
+    public IsEqualTo(Integer n){
+      this.n = n;
+    }
+    public Boolean function(Integer x) {
+      return n.equals(x);
+    }
+  }
+  
+  public static IsEqualTo isEqualTo(int x){
+    return new IsEqualTo(x);
+  }
+  
+  @Test
+  public void callableAssertIsFunc() throws InterruptedException{
+    final Changing c = new Changing();
+    new Thread(c).start();
+    TUnit.assertThat( new Callable<Integer>() {
+      public Integer call() throws Exception {
+        return c.x;
+      }})
+      .is(isEqualTo(10));
+  }
+  
+  
 }

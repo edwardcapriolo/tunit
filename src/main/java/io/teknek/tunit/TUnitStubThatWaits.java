@@ -3,8 +3,6 @@ package io.teknek.tunit;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.ComparisonFailure;
-
 public class TUnitStubThatWaits<T>{
   private Callable<T> operation;
   private long waitInMillis = 1000;
@@ -18,8 +16,12 @@ public class TUnitStubThatWaits<T>{
     return this;
   }
   
-  
-  private void isFunction(T expected, Function1<Boolean,T> compare){
+  public void is(Function1<Boolean,T> eventuallyIs){
+    IsAble<T> i = new IsAble<T>(this.operation, eventuallyIs, this.waitInMillis);
+    i.doIs();
+  }
+   
+  private void isFunction(T expected, CompareFunction<Boolean,T> compare){
     long start = System.currentTimeMillis();
     T result = null;
     try {
@@ -49,40 +51,17 @@ public class TUnitStubThatWaits<T>{
   }
   
   public void isNotEqualTo(T expected){
-    isFunction(expected, new Function1(){
-      public Object function(Object x, Object y) {
+    isFunction(expected, new CompareFunction<Boolean,T>(){
+      public Boolean function(T x, T y) {
         return !x.equals(y);
       }});
   }
   
-  
   public void isEqualTo(T expected){
-    long start = System.currentTimeMillis();
-    T result = null;
-    try {
-      result = operation.call();
-    } catch (Exception e1) {
-      throw new RuntimeException(e1);
-    }
-    if (result.equals(expected)){
-      return;
-    }
-    for (long now = System.currentTimeMillis(); now < start + waitInMillis ; now = System.currentTimeMillis()){
-      try {
-        result = operation.call();
-        if (result.equals(expected)){
-          return;
-        }
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      try {
-        Thread.sleep(1);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    throw new org.junit.ComparisonFailure("ComparisonFailure", expected.toString(), result.toString());
+    isFunction(expected, new CompareFunction<Boolean,T>(){
+      public Boolean function(T x, T y) {
+        return x.equals(y);
+      }});
   }
   
   public Callable<T> getOperation() {
