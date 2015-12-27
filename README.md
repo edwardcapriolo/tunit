@@ -3,7 +3,7 @@ Time/Transition Unit testing extensions
 
 Motivation
 -----
-At times complex async applications become hard to test. This is especially true for 3rd party applications, async applications, and background threads inside applications. TUnit (Time/Transition/Teknek Unit) was designed to help test these types of applications.
+At times complex async applications become hard to test. This is especially true for 3rd party applications, async applications, and background threads inside applications. TUnit (Time/Transition/Teknek Unit) is designed to help test these types of applications.
 
 Usage
 -----
@@ -18,7 +18,7 @@ Usage
 Motivation
 -----
 
-To understand how TUnit might be useful, look at an application has a class like the one below:
+To understand how TUnit might be useful, look at an application that has a class like the one below:
 
 ```java
   class Changing implements Runnable {
@@ -35,7 +35,7 @@ To understand how TUnit might be useful, look at an application has a class like
 
 ```
 
-Because of the way threads work we can generally assume that the value of x will reach 10 in about 1 second. However we do not know for sure when threads will get scheduled. Also imagine if we are not using a hardcoded sleep(10) ms. Suppose that value was variable. One way to test that 
+Because of the way threads work we can generally assume that the value of x will reach 10 in about 1 second. However, we do not know for sure when threads will get scheduled. Also what if we are not using a hardcoded sleep(10) ms? How might we test that?
 
 ```java
   @Test
@@ -48,12 +48,12 @@ Because of the way threads work we can generally assume that the value of x will
   }
 ```
 
-Besides the code being ugle, the test suite runs as long as all the sleep statements. Now of course if control everything you may not have to test like this, but that is usually not the case. 
+Besides the code being ugly, the test suite runs as long as all the sleep statements. (If control everything you may not have to test like this, but that is usually not the case.) 
 
 The TUnit way
 -----
 
-TUnit samples the changing object at 1 ms intervals. If the value of the item monitors ever equals the expected value we can return normally. 
+TUnit samples the changing object at 1 ms intervals. If the value of the item monitorsed ever equals the expected value the framework returns normally. 
 
 ```java
   @Test
@@ -67,7 +67,7 @@ TUnit samples the changing object at 1 ms intervals. If the value of the item mo
   }
 ```
 
-In the worst case scenario TUnit will wait no more than a specified amount of time (default 1) second.
+In the worst case scenario TUnit will wait no more than a specified amount of time (default 1 second).
 
 ```java
   @Test
