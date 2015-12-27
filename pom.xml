@@ -4,7 +4,7 @@
 	<groupId>io.teknek</groupId>
 	<artifactId>tunit</artifactId>
 	<name>nibiru</name>
-	<version>0.0.0-SNAPSHOT</version>
+	<version>0.0.0</version>
 	<description>Time/Transition Unit testing extensions</description>
 	<packaging>jar</packaging>
 
